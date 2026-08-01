@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pastelaria e Lanchonete da Chica — Cardápio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FCF2DE;
+    --cream-2:#FFFAF0;
+    --red:#D6402B;
+    --red-dark:#A82C1D;
+    --yellow:#F4B400;
+    --yellow-soft:#FCE29B;
+    --brown:#4A2A1D;
+    --orange:#F1793B;
+    --green:#6B8E4E;
+    --shadow: 0 10px 24px -12px rgba(74,42,29,0.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--brown);
+    font-family:'Nunito',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo 2', cursive;
+  }
+  a{color:inherit;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:linear-gradient(155deg,var(--yellow) 0%, var(--orange) 55%, var(--red) 100%);
+    padding:56px 20px 90px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero-icons{
+    position:absolute; inset:0; pointer-events:none;
+  }
+  .hero-icons svg{
+    position:absolute; opacity:.9; filter:drop-shadow(0 6px 10px rgba(0,0,0,.15));
+    animation: float 6s ease-in-out infinite;
+  }
+  .hi1{ width:70px; top:8%; left:6%; animation-delay:0s;}
+  .hi2{ width:56px; top:18%; right:8%; animation-delay:1.2s;}
+  .hi3{ width:60px; bottom:26%; left:12%; animation-delay:.6s;}
+  .hi4{ width:50px; bottom:18%; right:14%; animation-delay:1.8s;}
+  @keyframes float{
+    0%,100%{ transform: translateY(0) rotate(-4deg); }
+    50%{ transform: translateY(-14px) rotate(4deg); }
+  }
+  .eyebrow{
+    display:inline-block;
+    background:rgba(255,255,255,.35);
+    border:2px solid rgba(255,255,255,.6);
+    color:var(--brown);
+    font-weight:700;
+    letter-spacing:.08em;
+    padding:6px 18px;
+    border-radius:999px;
+    font-size:.75rem;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    color:#fff;
+    font-size:clamp(2.1rem, 6vw, 3.4rem);
+    margin:0 0 8px;
+    text-shadow: 0 4px 0 rgba(0,0,0,.12);
+    font-weight:800;
+  }
+  .hero p.tag{
+    color:#fff;
+    font-size:1.15rem;
+    font-weight:600;
+    font-style:italic;
+    margin:0 0 26px;
+    text-shadow: 0 2px 0 rgba(0,0,0,.1);
+  }
+  .hero-badges{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+  }
+  .badge{
+    background:var(--brown);
+    color:var(--cream-2);
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:.85rem;
+    font-weight:700;
+    display:flex; align-items:center; gap:6px;
+  }
+  .scallop{
+    position:absolute; left:0; right:0; bottom:-1px; height:34px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 12px, var(--cream) 13px) 0 -1px / 24px 24px repeat-x;
+  }
+
+  /* ---------- STICKY NAV ---------- */
+  .navbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--cream-2);
+    border-bottom:3px solid var(--yellow-soft);
+    padding:10px 14px;
+  }
+  .nav-inner{
+    max-width:980px; margin:0 auto;
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+  }
+  .chip{
+    border:2px solid var(--brown);
+    background:#fff;
+    color:var(--brown);
+    padding:7px 16px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.85rem;
+    cursor:pointer;
+    transition:.15s;
+    white-space:nowrap;
+  }
+  .chip:hover{ transform:translateY(-2px); }
+  .chip.active{ background:var(--red); border-color:var(--red); color:#fff; }
+  .search-wrap{
+    margin-left:auto;
+    position:relative;
+    flex:1 1 180px;
+    max-width:220px;
+  }
+  .search-wrap input{
+    width:100%;
+    border:2px solid var(--brown);
+    border-radius:999px;
+    padding:7px 14px 7px 32px;
+    font-family:'Nunito',sans-serif;
+    font-size:.85rem;
+    outline:none;
+  }
+  .search-wrap input:focus{ border-color:var(--red); }
+  .search-wrap::before{
+    content:"🔎";
+    position:absolute; left:11px; top:50%; transform:translateY(-50%);
+    font-size:.8rem;
+  }
+  .fav-counter{
+    font-size:.8rem; font-weight:800; color:var(--red-dark);
+    white-space:nowrap;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  main{ max-width:980px; margin:0 auto; padding:34px 18px 10px; }
+  .section{ margin-bottom:46px; scroll-margin-top:70px; }
+  .section-head{
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:6px;
+  }
+  .section-head svg{ width:44px; flex-shrink:0; }
+  .section-head h2{
+    margin:0;
+    font-size:1.6rem;
+    color:var(--red-dark);
+  }
+  .section-sub{
+    margin:0 0 18px 58px;
+    font-style:italic;
+    color:#7a5b45;
+    font-size:.95rem;
+  }
+  .divider{
+    height:14px;
+    background:
+      radial-gradient(circle at 7px 0, var(--yellow-soft) 6px, transparent 7px) 0 -1px / 14px 14px repeat-x;
+    margin:8px 0 26px;
+    opacity:.8;
+  }
+
+  /* ---------- CARDS ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+    gap:16px;
+  }
+  .card{
+    background:#fff;
+    border-radius:18px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    border:2px solid transparent;
+    position:relative;
+    opacity:0; transform:translateY(16px);
+    transition:opacity .5s ease, transform .5s ease, border-color .2s;
+  }
+  .card.revealed{ opacity:1; transform:translateY(0); }
+  .card:hover{ border-color:var(--yellow); }
+  .card.hidden-item{ display:none; }
+  .ribbon{
+    position:absolute; top:-8px; right:-8px;
+    background:var(--red);
+    color:#fff; font-size:.65rem; font-weight:800;
+    padding:5px 10px; border-radius:999px;
+    box-shadow:0 3px 6px rgba(0,0,0,.2);
+    transform:rotate(6deg);
+  }
+  .card-top{ display:flex; align-items:flex-start; gap:10px; }
+  .card-icon{ width:38px; flex-shrink:0; }
+  .card-title{ font-family:'Baloo 2',cursive; font-weight:700; font-size:1.05rem; color:var(--brown); margin:0; }
+  .fav-btn{
+    margin-left:auto; background:none; border:none; cursor:pointer;
+    font-size:1.2rem; line-height:1; color:#d8c9b8; transition:.15s;
+    padding:0;
+  }
+  .fav-btn.active{ color:var(--red); transform:scale(1.15); }
+  .card-photo{
+    width:100%; height:130px; object-fit:cover; border-radius:12px;
+    margin-bottom:10px; border:2px solid var(--yellow-soft);
+  }
+  .promo-banner{
+    display:block; width:100%; border-radius:20px; overflow:hidden;
+    box-shadow:var(--shadow); margin:0 0 30px; border:3px solid var(--yellow);
+  }
+  .promo-banner img{ width:100%; display:block; }
+  .section-photo{
+    width:100%; max-height:170px; object-fit:cover; border-radius:14px;
+    margin:0 0 16px; border:2px solid var(--yellow-soft);
+  }
+  .card-desc{
+    font-size:.87rem; color:#6b5341; margin:8px 0 10px; min-height:2.2em;
+  }
+  .card-bottom{ display:flex; align-items:center; justify-content:space-between; }
+  .price{
+    font-family:'Baloo 2',cursive; font-weight:800; color:var(--red-dark); font-size:1.05rem;
+  }
+  .details-toggle{
+    background:var(--cream);
+    border:2px solid var(--yellow-soft);
+    color:var(--brown);
+    font-weight:700; font-size:.75rem;
+    padding:4px 10px; border-radius:999px; cursor:pointer;
+  }
+  .details-toggle:hover{ background:var(--yellow-soft); }
+  .card-full{
+    max-height:0; overflow:hidden; transition:max-height .3s ease;
+    font-size:.83rem; color:#6b5341; line-height:1.4;
+  }
+  .card-full.open{ max-height:220px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--yellow-soft); }
+
+  /* ---------- CHIP-GRID (long lists) ---------- */
+  .chipgrid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:8px;
+  }
+  .flavor{
+    background:#fff;
+    border:1.5px solid var(--yellow-soft);
+    border-radius:10px;
+    padding:8px 12px;
+    font-size:.85rem;
+    font-weight:600;
+    display:flex; justify-content:space-between; gap:6px;
+    opacity:0; transform:translateY(8px);
+    transition:opacity .4s, transform .4s, border-color .15s, background .15s;
+  }
+  .flavor.revealed{ opacity:1; transform:translateY(0); }
+  .flavor:hover{ border-color:var(--red); background:var(--cream); }
+  .flavor.hidden-item{ display:none; }
+  .flavor .p{ color:var(--red-dark); font-weight:800; white-space:nowrap; }
+  .price-note{
+    font-family:'Baloo 2',cursive; font-weight:700; color:var(--brown);
+    background:var(--yellow-soft); display:inline-block;
+    padding:4px 14px; border-radius:999px; margin-bottom:14px; font-size:.9rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--brown);
+    color:var(--cream-2);
+    text-align:center;
+    padding:44px 20px 34px;
+    margin-top:30px;
+    position:relative;
+  }
+  footer .scallop-top{
+    position:absolute; left:0; right:0; top:-1px; height:30px;
+    background:
+      radial-gradient(circle at 10px 24px, transparent 12px, var(--brown) 13px) 0 0 / 24px 24px repeat-x;
+  }
+  footer h3{ color:var(--yellow); font-size:1.5rem; margin:0 0 14px; }
+  footer .info-line{ margin:6px 0; font-weight:600; }
+  footer .contact-btn{
+    display:inline-block; margin-top:18px;
+    background:var(--red); color:#fff; font-weight:800;
+    padding:12px 28px; border-radius:999px; text-decoration:none;
+    box-shadow:0 8px 18px -6px rgba(0,0,0,.5);
+    transition:.15s;
+  }
+  footer .contact-btn:hover{ transform:translateY(-2px); background:var(--red-dark); }
+  footer .fine{ margin-top:22px; font-size:.75rem; opacity:.6; }
+
+  .empty-msg{
+    text-align:center; padding:30px; font-style:italic; color:#a08363; display:none;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-icons">
+    <svg class="hi1" viewBox="0 0 64 64"><path d="M8 40 Q32 8 56 40 Q50 30 44 34 Q38 26 32 34 Q26 26 20 34 Q14 30 8 40Z" fill="#F4B400" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="hi2" viewBox="0 0 64 64"><ellipse cx="32" cy="46" rx="22" ry="8" fill="#F1793B" stroke="#4A2A1D" stroke-width="2"/><ellipse cx="32" cy="30" rx="8" ry="16" fill="#fff" stroke="#4A2A1D" stroke-width="2"/></svg>
+    <svg class="hi3" viewBox="0 0 64 64"><rect x="14" y="20" width="36" height="34" rx="6" fill="#F4B400" stroke="#4A2A1D" stroke-width="2"/><ellipse cx="32" cy="20" rx="18" ry="7" fill="#FCE29B" stroke="#4A2A1D" stroke-width="2"/></svg>
+    <svg class="hi4" viewBox="0 0 64 64"><path d="M16 54 L16 22 Q32 10 48 22 L48 54Z" fill="#D6402B" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/><ellipse cx="32" cy="22" rx="16" ry="6" fill="#fff" stroke="#4A2A1D" stroke-width="2"/></svg>
+  </div>
+  <span class="eyebrow">Feito na hora ✦ direto da chapa</span>
+  <h1>Pastelaria e Lanchonete<br>da Chica</h1>
+  <p class="tag">"Um pastel quentinho e um sorriso — é assim que a gente recebe você"</p>
+  <div class="hero-badges">
+    <span class="badge">📍 Rua Doutor José do Amaral, 21B — Jardim 3 Marias</span>
+    <span class="badge">🕗 Aberto das 7h às 21h</span>
+  </div>
+  <div class="scallop"></div>
+</section>
+
+<!-- ================= NAV / FILTROS ================= -->
+<div class="navbar">
+  <div class="nav-inner">
+    <button class="chip active" data-filter="todos">Todos</button>
+    <button class="chip" data-filter="novidades">🆕 Novidades</button>
+    <button class="chip" data-filter="salgados">🥟 Pastéis</button>
+    <button class="chip" data-filter="doces">🍫 Doces</button>
+    <button class="chip" data-filter="lanches">🍔 Lanches</button>
+    <button class="chip" data-filter="dogs">🌭 Dogs</button>
+    <button class="chip" data-filter="potes">🍮 Bolos de Pote</button>
+    <button class="chip" data-filter="tapiocas">🫓 Tapiocas</button>
+    <button class="chip" data-filter="bebidas">🥤 Bebidas</button>
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="Buscar item..."></div>
+    <span class="fav-counter" id="favCounter">♥ 0 favoritos</span>
+  </div>
+</div>
+
+<main>
+
+  <p class="empty-msg" id="emptyMsg">Nenhum item encontrado — tenta buscar outra palavrinha 🙂</p>
+
+  <!-- ============ NOVIDADES ============ -->
+  <div class="section" data-section="novidades" id="sec-novidades">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M8 40 Q32 8 56 40 Q50 30 44 34 Q38 26 32 34 Q26 26 20 34 Q14 30 8 40Z" fill="#D6402B" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/></svg>
+      <h2>Novidades</h2>
+    </div>
+    <p class="section-sub">Chegou fresquinho no cardápio — direto da cozinha da Chica.</p>
+
+    <img class="promo-banner" src="mini_lasanha.png" alt="Promoção Mini Lasanha da Chica, 500g por R$ 25,00">
+
+    <div class="grid" data-grid="novidades">
+      <div class="card" data-name="mini lasanha">
+        <div class="ribbon">novidade</div>
+        <img class="card-photo" src="mini_lasanha.png" alt="Mini lasanha individual da Chica">
+        <div class="card-top"><span class="card-title">Mini Lasanha · 500g</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Individual, na medida certa pra uma refeição completa. Muito queijo e cremosidade, quentinha e feita com ingredientes de qualidade — servida na bandejinha de alumínio.</p>
+        <div class="card-bottom"><span class="price">R$ 25,00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ PASTÉIS SALGADOS ============ -->
+  <div class="section" data-section="salgados" id="sec-salgados">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M8 40 Q32 8 56 40 Q50 30 44 34 Q38 26 32 34 Q26 26 20 34 Q14 30 8 40Z" fill="#F4B400" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/></svg>
+      <h2>Pastéis Salgados</h2>
+    </div>
+    <p class="section-sub">Massa fininha e crocante, recheio generoso, fritos na hora do seu pedido.</p>
+
+    <div class="grid" data-grid="salgados">
+      <div class="card" data-name="carne">
+        <div class="ribbon">clássico</div>
+        <div class="card-top"><span class="card-title">Carne</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Carne moída temperada com tempero da casa, simples e certeiro.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="carne com azeitona">
+        <div class="card-top"><span class="card-title">Carne com azeitona</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">A receita clássica ganha um toque salgadinho de azeitona picada.</p>
+        <div class="card-bottom"><span class="price">R$ 16,00</span></div>
+      </div>
+      <div class="card" data-name="queijo">
+        <div class="card-top"><span class="card-title">Queijo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Puro queijo derretido, para quem gosta do simples bem feito.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="frango com catupiry">
+        <div class="ribbon">mais pedido</div>
+        <div class="card-top"><span class="card-title">Frango com catupiry</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Frango desfiado bem temperado com bastante catupiry cremoso.</p>
+        <div class="card-bottom"><span class="price">R$ 16,00</span></div>
+      </div>
+      <div class="card" data-name="pizza">
+        <div class="card-top"><span class="card-title">Pizza</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Molho, mussarela e orégano — a pizzaria dentro do pastel.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="calabresa com queijo">
+        <div class="card-top"><span class="card-title">Calabresa com queijo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Calabresa fatiada e queijo derretido, combinação que nunca falha.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="bauru">
+        <div class="card-top"><span class="card-title">Bauru</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Presunto, queijo e tomate no clássico estilo bauru.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="calabresa com catupiry">
+        <div class="card-top"><span class="card-title">Calabresa com catupiry</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Calabresa e catupiry — a dupla preferida de quem ama recheio cremoso.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="calabresa">
+        <div class="card-top"><span class="card-title">Calabresa</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Só calabresa, do jeito que tem que ser: bem temperada.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="carne com queijo">
+        <div class="card-top"><span class="card-title">Carne com queijo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">A carne de sempre, agora com queijo derretendo por dentro.</p>
+        <div class="card-bottom"><span class="price">R$ 12,00</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;max-width:520px;" data-name="pastel especial">
+      <div class="ribbon">monte o seu</div>
+      <div class="card-top"><span class="card-title">Pastel Especial · 300g</span><button class="fav-btn">♥</button></div>
+      <p class="card-desc">Escolha 3 recheios e monte o pastel do seu jeito: catupiry, cheddar, calabresa, bacon, ovo, milho, ervilha, azeitona, mussarela, frango ou carne.</p>
+      <div class="card-bottom"><span class="price">R$ 30,00</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ PASTÉIS DOCES ============ -->
+  <div class="section" data-section="doces" id="sec-doces">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M8 40 Q32 8 56 40 Q50 30 44 34 Q38 26 32 34 Q26 26 20 34 Q14 30 8 40Z" fill="#D6402B" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/></svg>
+      <h2>Pastéis Doces</h2>
+    </div>
+    <p class="section-sub">Pra fechar com chave de ouro — ou de chocolate.</p>
+
+    <div class="grid" data-grid="doces">
+      <div class="card" data-name="sonho de valsa">
+        <div class="card-top"><span class="card-title">Sonho de Valsa</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Chocolate ao leite e bombom sonho de valsa derretidos por dentro.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="ouro branco">
+        <div class="card-top"><span class="card-title">Ouro Branco</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Recheio de leite ninho com bombom ouro branco.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="avela com morango">
+        <div class="card-top"><span class="card-title">Avelã com morango</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Creme de avelã com pedaços de morango fresquinho.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="bis branco">
+        <div class="card-top"><span class="card-title">Bis Branco</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Leite ninho recheado com bis branco crocante.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="bis black">
+        <div class="card-top"><span class="card-title">Bis Black</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Chocolate ao leite com bis black bem crocante.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="bis oreo">
+        <div class="card-top"><span class="card-title">Bis de Oreo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Ninho com bis Oreo — para os fãs de biscoito recheado.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ LANCHES ============ -->
+  <div class="section" data-section="lanches" id="sec-lanches">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><ellipse cx="32" cy="46" rx="22" ry="8" fill="#F1793B" stroke="#4A2A1D" stroke-width="2"/><ellipse cx="32" cy="30" rx="8" ry="16" fill="#fff" stroke="#4A2A1D" stroke-width="2"/></svg>
+      <h2>Hambúrgueres e Lanches</h2>
+    </div>
+    <p class="section-sub">Pão na chapa, ingredientes fresquinhos, montado na hora.</p>
+
+    <div class="grid" data-grid="lanches">
+      <div class="card" data-name="hamburguer">
+        <div class="card-top"><span class="card-title">Hambúrguer</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Pão, maionese e hambúrguer de 120g. O básico bem feito.</p>
+        <div class="card-bottom"><span class="price">R$ 10,00</span></div>
+      </div>
+      <div class="card" data-name="x-burguer">
+        <div class="card-top"><span class="card-title">X-Burguer</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Pão, maionese, hambúrguer e queijo derretido.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="x-salada">
+        <div class="card-top"><span class="card-title">X-Salada</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Hambúrguer, queijo, alface e tomate fresquinhos.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="x-bacon">
+        <img class="card-photo" src="x_bacon.png" alt="X-Bacon da Chica com bacon crocante e queijo derretido">
+        <div class="card-top"><span class="card-title">X-Bacon</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Hambúrguer, queijo e bacon crocante.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="x-egg">
+        <div class="card-top"><span class="card-title">X-Egg</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Hambúrguer, queijo e ovo caprichado.</p>
+        <div class="card-bottom"><span class="price">R$ 18,00</span></div>
+      </div>
+      <div class="card" data-name="x-tudo">
+        <div class="ribbon">mais pedido</div>
+        <div class="card-top"><span class="card-title">X-Tudo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Hambúrguer, queijo, presunto, ovo, alface, tomate e bacon — sem economizar em nada.</p>
+        <div class="card-bottom"><span class="price">R$ 25,00</span></div>
+      </div>
+      <div class="card" data-name="misto quente">
+        <div class="card-top"><span class="card-title">Misto Quente</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Pão na chapa, presunto e queijo — clássico de lanchonete.</p>
+        <div class="card-bottom"><span class="price">R$ 10,00</span></div>
+      </div>
+      <div class="card" data-name="pao com manteiga">
+        <div class="card-top"><span class="card-title">Pão com manteiga</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Pão francês na chapa, bem passado na manteiga.</p>
+        <div class="card-bottom"><span class="price">R$ 5,90</span></div>
+      </div>
+      <div class="card" data-name="pao com ovo">
+        <div class="card-top"><span class="card-title">Pão com ovo</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Simples, quentinho e na medida certa.</p>
+        <div class="card-bottom"><span class="price">R$ 9,00</span></div>
+      </div>
+    </div>
+
+    <p class="section-sub" style="margin-top:26px;">🍟 Porções de batata</p>
+    <div class="grid" data-grid="lanches">
+      <div class="card" data-name="batata simples">
+        <div class="card-top"><span class="card-title">Batata simples · 500g</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Maionese, ketchup e mostarda opcionais.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="batata especial da chica">
+        <div class="ribbon">especialidade</div>
+        <img class="card-photo" src="batata_especial.png" alt="Batata especial da Chica com cheddar, catupiry e bacon">
+        <div class="card-top"><span class="card-title">Batata especial da Chica · 500g</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Bacon, catupiry, cheddar, mostarda, ketchup, maionese e queijo ralado — tudo junto.</p>
+        <div class="card-bottom"><span class="price">R$ 25,00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ DOGS ============ -->
+  <div class="section" data-section="dogs" id="sec-dogs">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M16 54 L16 22 Q32 10 48 22 L48 54Z" fill="#D6402B" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/><ellipse cx="32" cy="22" rx="16" ry="6" fill="#fff" stroke="#4A2A1D" stroke-width="2"/></svg>
+      <h2>Hot-Dogs</h2>
+    </div>
+    <p class="section-sub">Recheados até não caber mais nada. Toque em "ver recheio" pra saber o que vem dentro.</p>
+
+    <div class="grid" data-grid="dogs">
+      <div class="card" data-name="hot-dog simples">
+        <div class="card-top"><span class="card-title">Hot-Dog Simples</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">O tradicional, sempre uma boa pedida.</p>
+        <div class="card-bottom">
+          <span class="price">R$ 15,00</span>
+          <button class="details-toggle">ver recheio ▾</button>
+        </div>
+        <div class="card-full">Pão, maionese, 2 salsichas, purê de batata, batata palha, ketchup e mostarda.</div>
+      </div>
+      <div class="card" data-name="dog frango">
+        <div class="ribbon">mais pedido</div>
+        <div class="card-top"><span class="card-title">Dog Frango</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">O especial da casa com frango desfiado e bastante queijo.</p>
+        <div class="card-bottom">
+          <span class="price">R$ 26,00</span>
+          <button class="details-toggle">ver recheio ▾</button>
+        </div>
+        <div class="card-full">Pão, maionese, 2 salsichas, purê de batata, batata palha, milho, ervilha, queijo ralado, vinagrete, frango desfiado, ketchup, mostarda, cheddar e catupiry.</div>
+      </div>
+      <div class="card" data-name="dog bacon com mussarela">
+        <div class="card-top"><span class="card-title">Dog Bacon com Mussarela</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Recheio completo com toque de chilli no final.</p>
+        <div class="card-bottom">
+          <span class="price">R$ 26,00</span>
+          <button class="details-toggle">ver recheio ▾</button>
+        </div>
+        <div class="card-full">Pão, maionese, 2 salsichas, purê de batata, batata palha, milho, ervilha, queijo ralado, vinagrete, ketchup, mostarda, cheddar, catupiry e chilli.</div>
+      </div>
+      <div class="card" data-name="dog chilli">
+        <div class="card-top"><span class="card-title">Dog Chilli</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Pra quem gosta de tudo — literalmente.</p>
+        <div class="card-bottom">
+          <span class="price">R$ 26,00</span>
+          <button class="details-toggle">ver recheio ▾</button>
+        </div>
+        <div class="card-full">Pão, maionese, 2 salsichas, purê de batata, batata palha, milho, ervilha, queijo ralado, vinagrete, ketchup, mostarda, cheddar, catupiry e mussarela com bacon.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ BOLOS DE POTE ============ -->
+  <div class="section" data-section="potes" id="sec-potes">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><rect x="14" y="20" width="36" height="34" rx="6" fill="#F4B400" stroke="#4A2A1D" stroke-width="2"/><ellipse cx="32" cy="20" rx="18" ry="7" fill="#FCE29B" stroke="#4A2A1D" stroke-width="2"/></svg>
+      <h2>Bolos de Pote</h2>
+    </div>
+    <p class="section-sub">Camadinhas de bolo e recheio no ponto certo, 250ml de pura gula.</p>
+
+    <div class="grid" data-grid="potes" style="margin-bottom:18px;">
+      <div class="card" data-name="ninho com morango">
+        <div class="ribbon">mais pedido</div>
+        <div class="card-top"><span class="card-title">Ninho com morango</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Leite ninho cremoso com pedaços de morango.</p>
+        <div class="card-bottom"><span class="price">R$ 13,00</span></div>
+      </div>
+      <div class="card" data-name="nutella com morango">
+        <div class="ribbon">especial</div>
+        <div class="card-top"><span class="card-title">Nutella com morango</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Nutella de verdade com morango fresco entre as camadas.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+      <div class="card" data-name="ferrero rocher">
+        <div class="ribbon">especial</div>
+        <div class="card-top"><span class="card-title">Ferrero Rocher</span><button class="fav-btn">♥</button></div>
+        <p class="card-desc">Recheio inspirado no bombom, com avelã e chocolate.</p>
+        <div class="card-bottom"><span class="price">R$ 15,00</span></div>
+      </div>
+    </div>
+
+    <p class="price-note">Linha clássica · R$ 13,00 cada</p>
+    <div class="chipgrid" data-grid="potes">
+      <div class="flavor" data-name="maracuja com chocolate"><span>Maracujá com chocolate</span></div>
+      <div class="flavor" data-name="maracuja"><span>Maracujá</span></div>
+      <div class="flavor" data-name="ninho com uva verde"><span>Ninho com uva verde</span></div>
+      <div class="flavor" data-name="sensacao"><span>Sensação</span></div>
+      <div class="flavor" data-name="morango"><span>Morango</span></div>
+      <div class="flavor" data-name="napolitano"><span>Napolitano</span></div>
+      <div class="flavor" data-name="pacoca"><span>Paçoca</span></div>
+      <div class="flavor" data-name="prestigio"><span>Prestígio</span></div>
+      <div class="flavor" data-name="coco"><span>Coco</span></div>
+      <div class="flavor" data-name="chocolate"><span>Chocolate</span></div>
+      <div class="flavor" data-name="chocolate branco"><span>Chocolate branco</span></div>
+      <div class="flavor" data-name="abacaxi com coco"><span>Abacaxi com coco</span></div>
+      <div class="flavor" data-name="limao"><span>Limão</span></div>
+      <div class="flavor" data-name="limao com chocolate"><span>Limão com chocolate</span></div>
+      <div class="flavor" data-name="cenoura com chocolate"><span>Cenoura com chocolate</span></div>
+      <div class="flavor" data-name="dois amores"><span>Dois amores</span></div>
+    </div>
+
+    <p class="price-note" style="margin-top:20px;">Linha especial · R$ 15,00 cada</p>
+    <div class="chipgrid" data-grid="potes">
+      <div class="flavor" data-name="alpino"><span>Alpino</span></div>
+      <div class="flavor" data-name="ovomaltine"><span>Ovomaltine</span></div>
+      <div class="flavor" data-name="ouro branco"><span>Ouro branco</span></div>
+      <div class="flavor" data-name="sonho de valsa"><span>Sonho de valsa</span></div>
+      <div class="flavor" data-name="kinder bueno"><span>Kinder Bueno</span></div>
+      <div class="flavor" data-name="rafaello"><span>Rafaello</span></div>
+      <div class="flavor" data-name="pistache"><span>Pistache</span></div>
+      <div class="flavor" data-name="churros"><span>Churros</span></div>
+      <div class="flavor" data-name="ninho com morango especial"><span>Ninho com morango</span></div>
+      <div class="flavor" data-name="red velvet"><span>Red velvet</span></div>
+      <div class="flavor" data-name="oreo"><span>Oreo</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ TAPIOCAS ============ -->
+  <div class="section" data-section="tapiocas" id="sec-tapiocas">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M6 32 Q32 4 58 32 Q58 44 32 44 Q6 44 6 32Z" fill="#F4B400" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/></svg>
+      <h2>Tapiocas</h2>
+    </div>
+    <p class="section-sub">Douradas na chapa, na hora, doces ou salgadas.</p>
+
+    <div class="grid" data-grid="tapiocas">
+      <div class="card" data-name="tapioca leite moca coco"><div class="card-top"><span class="card-title">Leite moça, coco</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca leite moca morango"><div class="card-top"><span class="card-title">Leite moça, morango</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca creme de avela morango"><div class="card-top"><span class="card-title">Creme de avelã, morango</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca chocolate"><div class="card-top"><span class="card-title">Chocolate</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca chocolate morango"><div class="card-top"><span class="card-title">Chocolate, morango</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca calabresa"><div class="card-top"><span class="card-title">Calabresa</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca calabresa queijo"><div class="card-top"><span class="card-title">Calabresa, queijo</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca mussarela"><div class="card-top"><span class="card-title">Mussarela</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca frango catupiry"><div class="card-top"><span class="card-title">Frango com catupiry</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca bauru"><div class="card-top"><span class="card-title">Bauru</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 15,00</span></div></div>
+      <div class="card" data-name="tapioca mussarela manteiga"><div class="card-top"><span class="card-title">Mussarela, manteiga</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">consultar</span></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============ BEBIDAS ============ -->
+  <div class="section" data-section="bebidas" id="sec-bebidas">
+    <div class="section-head">
+      <svg viewBox="0 0 64 64"><path d="M18 12 L46 12 L42 52 L22 52Z" fill="#F1793B" stroke="#4A2A1D" stroke-width="2" stroke-linejoin="round"/><rect x="30" y="4" width="4" height="16" rx="2" fill="#fff" stroke="#4A2A1D" stroke-width="1.5"/></svg>
+      <h2>Bebidas</h2>
+    </div>
+    <p class="section-sub">Sucos naturais, refrigerantes geladinhos e cerveja pra acompanhar.</p>
+    <img class="section-photo" src="suco.png" alt="Sucos naturais da Chica, uva e vitamina de chocolate">
+
+    <p class="price-note">Sucos naturais com água mineral · R$ 10,00</p>
+    <div class="chipgrid" data-grid="bebidas">
+      <div class="flavor" data-name="suco laranja"><span>Laranja</span></div>
+      <div class="flavor" data-name="suco morango"><span>Morango</span></div>
+      <div class="flavor" data-name="suco uva"><span>Uva</span></div>
+      <div class="flavor" data-name="suco acerola"><span>Acerola</span></div>
+      <div class="flavor" data-name="suco cupuacu"><span>Cupuaçu</span></div>
+      <div class="flavor" data-name="suco abacaxi"><span>Abacaxi</span></div>
+      <div class="flavor" data-name="suco maracuja"><span>Maracujá</span></div>
+      <div class="flavor" data-name="suco goiaba"><span>Goiaba</span></div>
+      <div class="flavor" data-name="suco acerola laranja"><span>Acerola com laranja</span></div>
+      <div class="flavor" data-name="suco acai"><span>Açaí</span></div>
+    </div>
+
+    <p class="price-note" style="margin-top:20px;">Sucos com leite · R$ 13,00 · 250ml</p>
+    <div class="chipgrid" data-grid="bebidas">
+      <div class="flavor" data-name="suco leite laranja"><span>Laranja</span></div>
+      <div class="flavor" data-name="suco leite morango"><span>Morango</span></div>
+      <div class="flavor" data-name="suco leite cupuacu"><span>Cupuaçu</span></div>
+      <div class="flavor" data-name="suco leite goiaba"><span>Goiaba</span></div>
+      <div class="flavor" data-name="suco leite maracuja"><span>Maracujá</span></div>
+      <div class="flavor" data-name="suco leite acerola"><span>Acerola</span></div>
+      <div class="flavor" data-name="suco leite acai"><span>Açaí</span></div>
+      <div class="flavor" data-name="suco leite acerola laranja"><span>Acerola com laranja</span></div>
+      <div class="flavor" data-name="suco leite uva"><span>Uva</span></div>
+      <div class="flavor" data-name="suco leite abacaxi"><span>Abacaxi</span></div>
+    </div>
+
+    <p class="price-note" style="margin-top:20px;">Refrigerantes e águas</p>
+    <div class="chipgrid" data-grid="bebidas">
+      <div class="flavor" data-name="fanta 350"><span>Fanta 350ml</span><span class="p">R$ 6,00</span></div>
+      <div class="flavor" data-name="tubaina 350"><span>Tubaína 350ml</span><span class="p">R$ 6,00</span></div>
+      <div class="flavor" data-name="guarana 350"><span>Guaraná 350ml</span><span class="p">R$ 6,00</span></div>
+      <div class="flavor" data-name="tonica"><span>Água tônica</span><span class="p">R$ 6,00</span></div>
+      <div class="flavor" data-name="coca lata"><span>Coca-Cola lata</span><span class="p">R$ 3,50</span></div>
+      <div class="flavor" data-name="guarana zero 600"><span>Guaraná zero 600ml</span><span class="p">R$ 8,00</span></div>
+      <div class="flavor" data-name="coca 600"><span>Coca-Cola 600ml</span><span class="p">R$ 8,00</span></div>
+      <div class="flavor" data-name="h2o"><span>H2O 500ml</span><span class="p">R$ 8,00</span></div>
+      <div class="flavor" data-name="h2o lemon"><span>H2O Lemon 500ml</span><span class="p">R$ 8,00</span></div>
+      <div class="flavor" data-name="agua sem gas"><span>Água sem gás 500ml</span><span class="p">R$ 3,00</span></div>
+      <div class="flavor" data-name="agua 1,5"><span>Água 1,5L</span><span class="p">R$ 6,00</span></div>
+      <div class="flavor" data-name="dolly"><span>Dolly laranja 2L</span><span class="p">R$ 10,00</span></div>
+      <div class="flavor" data-name="coca 2l"><span>Coca-Cola 2L</span><span class="p">R$ 17,99</span></div>
+      <div class="flavor" data-name="fanta 2l"><span>Fanta 2L</span><span class="p">R$ 17,99</span></div>
+    </div>
+
+    <p class="price-note" style="margin-top:20px;">🍺 Cervejas · 330ml</p>
+    <div class="grid" data-grid="bebidas">
+      <div class="card" data-name="stella artois"><div class="card-top"><span class="card-title">Stella Artois</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 10,00</span></div></div>
+      <div class="card" data-name="budweiser"><div class="card-top"><span class="card-title">Budweiser</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 10,00</span></div></div>
+      <div class="card" data-name="heineken"><div class="card-top"><span class="card-title">Heineken 250ml</span><button class="fav-btn">♥</button></div><div class="card-bottom"><span class="price">R$ 10,00</span></div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="scallop-top"></div>
+  <h3>Pastelaria e Lanchonete da Chica</h3>
+  <p class="info-line">📍 Rua Doutor José do Amaral, 21B — Jardim 3 Marias</p>
+  <p class="info-line">🕗 Todos os dias, das 7h às 21h</p>
+  <p class="info-line">💬 (11) 98247-6096</p>
+  <a class="contact-btn" href="https://wa.me/5511982476096?text=Oi!%20Vim%20pelo%20card%C3%A1pio%20e%20quero%20fazer%20um%20pedido%20%F0%9F%98%8B" target="_blank" rel="noopener">💬 Fazer pedido no WhatsApp</a>
+  <p class="fine">Feito com carinho pra Chica — cardápio digital ✦ atualize preços e fotos sempre que precisar</p>
+</footer>
+
+<script>
+  // ---- Reveal on scroll ----
+  const revealTargets = document.querySelectorAll('.card, .flavor');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  },{ threshold:.1 });
+  revealTargets.forEach(el=>io.observe(el));
+
+  // ---- Filter chips ----
+  const chips = document.querySelectorAll('.chip');
+  const sections = document.querySelectorAll('.section');
+  chips.forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      chips.forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      sections.forEach(sec=>{
+        sec.style.display = (f==='todos' || sec.dataset.section===f) ? '' : 'none';
+      });
+      document.getElementById('searchInput').value='';
+      applySearch('');
+    });
+  });
+
+  // ---- Search ----
+  const searchInput = document.getElementById('searchInput');
+  const emptyMsg = document.getElementById('emptyMsg');
+  function applySearch(qRaw){
+    const q = qRaw.trim().toLowerCase();
+    let anyVisible = false;
+    if(q){
+      chips.forEach(c=>c.classList.remove('active'));
+      document.querySelector('.chip[data-filter="todos"]').classList.add('active');
+      sections.forEach(sec=> sec.style.display = '');
+    }
+    document.querySelectorAll('.card, .flavor').forEach(item=>{
+      const name = item.dataset.name || '';
+      const match = !q || name.includes(q);
+      item.classList.toggle('hidden-item', !match);
+      if(match) anyVisible = true;
+    });
+    // hide sections with zero visible items when searching
+    sections.forEach(sec=>{
+      if(!q){ return; }
+      const visibleCount = sec.querySelectorAll('.card:not(.hidden-item), .flavor:not(.hidden-item)').length;
+      sec.style.display = visibleCount ? '' : 'none';
+    });
+    emptyMsg.style.display = (q && !anyVisible) ? 'block' : 'none';
+  }
+  searchInput.addEventListener('input', (e)=> applySearch(e.target.value));
+
+  // ---- Favorite hearts ----
+  let favCount = 0;
+  const favCounter = document.getElementById('favCounter');
+  document.querySelectorAll('.fav-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      btn.classList.toggle('active');
+      favCount += btn.classList.contains('active') ? 1 : -1;
+      favCounter.textContent = '♥ ' + favCount + ' favoritos';
+    });
+  });
+
+  // ---- Details toggle (hot dogs) ----
+  document.querySelectorAll('.details-toggle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const full = btn.closest('.card').querySelector('.card-full');
+      full.classList.toggle('open');
+      btn.textContent = full.classList.contains('open') ? 'esconder ▴' : 'ver recheio ▾';
+    });
+  });
+</script>
+
+</body>
+</html>
